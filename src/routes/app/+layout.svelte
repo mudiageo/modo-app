@@ -4,7 +4,7 @@
 	import { browser } from '$app/environment';
 	import { theme } from '$lib/stores/theme';
 	import { initDB } from '$lib/db/idb';
-	import '../../../app.css';
+	import '../../app.css';
 	import { slide, fade } from 'svelte/transition';
 	import { swipe } from '$lib/actions/swipe';
 	import { profileStore } from '$lib/data/index.svelte.ts';
