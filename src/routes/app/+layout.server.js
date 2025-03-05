@@ -5,7 +5,7 @@ export const load = async (event) => {
 
 	console.log(session);
 	if (!session?.user?.id) {
-		return redirect(303, '/welcome');
+		return redirect(303, '/');
 	}
 
 	return {

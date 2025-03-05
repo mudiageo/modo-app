@@ -1,125 +1,110 @@
 <script>
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { user } from '$lib/stores/auth';
-	import '../app.css';
+import { onMount } from 'svelte';
+import { goto } from '$app/navigation';
+import { user } from '$lib/stores/auth';
+import '../app.css';
 
-	onMount(() => {
-		if ($user) {
-			goto('/app');
-		}
-	});
+onMount(() => {
+  if ($user) {
+    goto('/app');
+  }
+});
+
+let currentSlide = $state(0);
+const slides = [
+  {
+    title: "Study smarter with AI",
+    description: "Get personalized study plans and recommendations powered by artificial intelligence",
+    image: "/images/study-ai.svg"
+  },
+  {
+    title: "Track your progress",
+    description: "Monitor your study habits and see your improvement over time",
+    image: "/images/progress.svg"
+  },
+  {
+    title: "Stay motivated",
+    description: "Achieve your academic goals with our gamified learning experience",
+    image: "/images/motivation.svg"
+  }
+];
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % slides.length;
+}
+
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+}
 </script>
 
 <svelte:head>
-	<title>Welcome to Modo</title>
+  <title>Welcome to Modo</title>
 </svelte:head>
 
-<div
-	class="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-800"
->
-	<div class="container mx-auto px-4 py-20">
-		<div class="mx-auto max-w-4xl text-center">
-			<a
-				href="/"
-				class="flez-col text-center text-6xl font-bold text-primary-600 dark:text-primary-400"
-			>
-				<div class="flex items-center justify-center">
-					<span class="flex">
-						<img src="/favicon-512x512.png" alt="Modo" class=" mx-auto flex h-12 gap-3" />
+<div class="min-h-screen bg-primary-600">
+  <div class="relative h-screen overflow-auto px-4 py-16">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -left-1/4 top-1/4 h-64 w-64 rounded-full bg-primary-500/30"></div>
+      <div class="absolute -right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-primary-700/30"></div>
+    </div>
 
-						odo
-					</span>
-				</div>
-			</a>
+    <div class="relative mx-auto max-w-md">
+      <!-- Logo -->
+      <div class="mb-12 text-center">
+        <img src="/favicon-512x512.png" alt="Modo" class="mx-auto h-16 w-16" />
+      </div>
 
-			<h1 class="mb-6 text-5xl font-bold text-gray-900 dark:text-white">
-				Transform Your Study Habits with AI
-			</h1>
+      <!-- Carousel -->
+      <div class="mb-12">
+        <div class="relative aspect-square">
+          <!-- 3D Platform -->
+          <div class="absolute inset-x-0 bottom-0 h-1/3 rounded-3xl bg-primary-700/50 backdrop-blur-lg"></div>
+          
+          <!-- Main Image -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <img 
+              src={slides[currentSlide].image} 
+              alt={slides[currentSlide].title}
+              class="h-2/3 w-2/3 object-contain"
+            />
+          </div>
+        </div>
 
-			<p class="mb-12 text-xl text-gray-600 dark:text-gray-300">
-				Get personalized study plans, smart task management, and AI-driven insights to boost your
-				academic performance.
-			</p>
+        <!-- Text Content -->
+        <div class="mt-8 text-center text-white">
+          <h2 class="mb-4 text-2xl font-bold">{slides[currentSlide].title}</h2>
+          <p class="text-primary-100">{slides[currentSlide].description}</p>
+        </div>
 
-			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="/auth/signup" class="btn-primary text-center"> Get Started Free </a>
-				<a
-					href="/auth/login"
-					class="btn-secondary text-center dark:border-gray-600 dark:text-gray-300"
-				>
-					Sign In
-				</a>
-			</div>
-		</div>
-	</div>
+        <!-- Dots -->
+        <div class="mt-8 flex justify-center gap-2">
+          {#each slides as _, i}
+            <button 
+              class="h-2 w-2 rounded-full transition-all {i === currentSlide ? 'bg-white w-6' : 'bg-primary-400'}"
+              onclick={() => currentSlide = i}
+            ></button>
+          {/each}
+        </div>
+      </div>
 
-	<!-- Features -->
-	<div class="container mx-auto px-4 py-20">
-		<div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-					Smart Study Planning
-				</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					AI-powered study schedules tailored to your learning style and goals.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M13 10V3L4 14h7v7l9-11h-7z"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">Progress Tracking</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					Monitor your progress and get insights to improve your study habits.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-					Analytics & Insights
-				</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					Get detailed analytics and personalized recommendations.
-				</p>
-			</div>
-		</div>
-	</div>
+      <!-- Buttons -->
+      <div class="space-y-4 px-4">
+        <a 
+          href="/auth/signup"
+          class="block w-full rounded-full bg-white py-4 text-center font-semibold text-primary-600 shadow-lg transition-transform hover:scale-105"
+        >
+          Get Started
+        </a>
+        <a 
+          href="/auth/login"
+          class="block w-full rounded-full border border-white/30 py-4 text-center font-semibold text-white backdrop-blur-sm transition-transform hover:scale-105"
+        >
+          Sign In
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
+

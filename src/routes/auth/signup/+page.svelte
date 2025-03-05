@@ -1,205 +1,201 @@
 <script lang="ts">
-	import type { PageData, ActionData } from './$types';
-	import { goto } from '$app/navigation';
-	import { page } from '$app/state';
+import type { PageData, ActionData } from './$types';
+import { goto } from '$app/navigation';
+import { page } from '$app/state';
+import { signIn } from 'svelte-guardian/client';
+import { enhance, applyAction } from '$app/forms';
+import { profileStore } from '$lib/data/index.svelte.ts';
 
-	import { signIn } from 'svelte-guardian/client';
-	import { enhance, applyAction } from '$app/forms';
+let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let { data, form }: { data: PageData; form: ActionData } = $props();
+let formData = $state({
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+});
+let user = form?.user;
+let error = $state('');
 
-	import { profileStore } from '$lib/data/index.svelte.ts';
+if (form?.success) {
+  profileStore.data = { name: user.name, email: user.email };
+  handleSignIn();
+}
 
-	let formData = $state({
-		name: '',
-		email: '',
-		password: '',
-		confirmPassword: ''
-	});
-	let user = form?.user;
-	let error = $state('');
+async function handleSignIn() {
+  try {
+    const result = await signIn('credentials', {
+      email: formData.email,
+      password: formData.password,
+      redirect: false,
+      callbackUrl: '/auth/onboarding'
+    });
 
-	if (form?.success) {
-		console.log({ name: user.name, email: user.email });
-		profileStore.data = { name: user.name, email: user.email };
-
-		handleSignIn();
-		//goto('/auth/onboarding');
-	}
-	async function handleSignIn() {
-		try {
-			const result = await signIn('credentials', {
-				email: formData.email,
-				password: formData.password,
-				redirect: false,
-				callbackUrl: '/auth/onboarding'
-			});
-			console.log(result);
-			console.log(await result.json());
-
-			if (result?.error) {
-				error = 'Invalid email or password';
-			} else {
-				if (page.data) console.log(page.data);
-			}
-		} catch (e) {
-			error = 'An error occurred. Please try again.';
-		}
-	}
+    if (result?.error) {
+      error = 'Invalid email or password';
+    } else {
+      if (page.data) console.log(page.data);
+    }
+  } catch (e) {
+    error = 'An error occurred. Please try again.';
+  }
+}
 </script>
 
-<div
-	class="flex min-h-screen flex-col justify-center bg-gray-50 py-12 dark:bg-gray-900 sm:px-6 lg:px-8"
->
-	<div class="sm:mx-auto sm:w-full sm:max-w-md">
-		<img src="/favicon-512x512.png" alt="Modo" class="mx-auto h-12" />
-		<h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
-			Create your account
-		</h2>
-	</div>
+<div class="min-h-screen bg-primary-600">
+  <div class="relative flex min-h-screen flex-col justify-center overflow-hidden py-12">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -left-1/4 top-1/4 h-64 w-64 rounded-full bg-primary-500/30"></div>
+      <div class="absolute -right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-primary-700/30"></div>
+    </div>
 
-	<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-		<div class="bg-white px-4 py-8 shadow dark:bg-gray-800 sm:rounded-lg sm:px-10">
-			{#if error}
-				<div class="mb-4 rounded-md bg-red-50 p-4 text-red-700 dark:bg-red-900 dark:text-red-100">
-					{error}
-				</div>
-			{/if}
-			{#if form?.error}
-				<div class="mb-4 rounded-md bg-red-50 p-4 text-red-700 dark:bg-red-900 dark:text-red-100">
-					{form?.error}
-				</div>
-			{/if}
-				{#if form?.success}
-				<div class="mb-4 rounded-md bg-greenn-50 p-4 text-green-700 dark:bg-green-900 dark:text-green-100">
-					Your account has been created!
-				</div>
-			{/if}
+    <div class="relative mx-auto w-full max-w-md px-4">
+      <div class="mb-8 text-center">
+        <img src="/favicon-512x512.png" alt="Modo" class="mx-auto h-16 w-16" />
+        <h2 class="mt-6 text-3xl font-bold text-white">Create your account</h2>
+        <p class="mt-2 text-primary-100">Join our community of learners today</p>
+      </div>
 
-			<form
-				class="space-y-6"
-				method="POST"
-				use:enhance={({ formData }) => {
-					const password = formData.get('password');
-					const confirmPassword = formData.get('confirmPassword');
+      <div class="rounded-2xl bg-white/10 p-8 backdrop-blur-lg">
+        {#if error || form?.error}
+          <div class="mb-4 rounded-lg bg-red-500/10 p-4 text-sm text-red-200">
+            {error || form?.error}
+          </div>
+        {/if}
 
-					if (password !== confirmPassword) return (error = 'Passwords do not match');
+        {#if form?.success}
+          <div class="mb-4 rounded-lg bg-green-500/10 p-4 text-sm text-green-200">
+            Your account has been created!
+          </div>
+        {/if}
 
-					return async ({ result }) => {
+        <form
+          class="space-y-6"
+          method="POST"
+          use:enhance={({ formData }) => {
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirmPassword');
 
-						let user = result.data?.user
-						if(user) {
-							profileStore.data = { name: user.name, email: user.email };
-							await handleSignIn();
+            if (password !== confirmPassword) return (error = 'Passwords do not match');
 
-							goto('/auth/onboarding')
+            return async ({ result }) => {
+              let user = result.data?.user
+              if(user) {
+                profileStore.data = { name: user.name, email: user.email };
+                await handleSignIn();
+                goto('/auth/onboarding')
+              }
+              if (result.type === 'redirect') {
+                goto(result.location);
+              } else {
+                await applyAction(result);
+              }
+            };
+          }}
+        >
+          <div>
+            <label for="name" class="block text-sm font-medium text-white">
+              Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              bind:value={formData.name}
+              required
+              class="mt-1 block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none focus:ring-0"
+              placeholder="Enter your name"
+            />
+          </div>
 
-						}
-						if (result.type === 'redirect') {
-							goto(result.location);
-						} else {
-							await applyAction(result);
-						}
-					};
-				}}
-			>
-				<div>
-					<label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-						Name
-					</label>
-					<input
-						type="text"
-						id="name"
-						name="name"
-						bind:value={formData.name}
-						required
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-					/>
-				</div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-white">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              bind:value={formData.email}
+              required
+              class="mt-1 block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none focus:ring-0"
+              placeholder="Enter your email"
+            />
+          </div>
 
-				<div>
-					<label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-						Email
-					</label>
-					<input
-						type="email"
-						id="email"
-						name="email"
-						bind:value={formData.email}
-						required
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-					/>
-				</div>
+          <div>
+            <label for="password" class="block text-sm font-medium text-white">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              bind:value={formData.password}
+              required
+              minlength="8"
+              class="mt-1 block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none focus:ring-0"
+              placeholder="Create a password"
+            />
+          </div>
 
-				<div>
-					<label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-						Password
-					</label>
-					<input
-						type="password"
-						id="password"
-						name="password"
-						bind:value={formData.password}
-						required
-						minlength="8"
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-					/>
-				</div>
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-white">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              bind:value={formData.confirmPassword}
+              required
+              minlength="8"
+              class="mt-1 block w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-white/50 backdrop-blur-sm focus:border-white/20 focus:outline-none focus:ring-0"
+              placeholder="Confirm your password"
+            />
+          </div>
 
-				<div>
-					<label
-						for="confirmPassword"
-						class="block text-sm font-medium text-gray-700 dark:text-gray-300"
-					>
-						Confirm Password
-					</label>
-					<input
-						type="password"
-						id="confirmPassword"
-						name="confirmPassword"
-						bind:value={formData.confirmPassword}
-						required
-						minlength="8"
-						class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
-					/>
-				</div>
+          <button
+            type="submit"
+            class="w-full rounded-xl bg-white py-3 text-center font-semibold text-primary-600 shadow-lg transition-transform hover:scale-105"
+          >
+            Create Account
+          </button>
+        </form>
 
-				<button type="submit" class="btn-primary w-full"> Sign Up </button>
-			</form>
+        <div class="mt-6">
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center">
+              <div class="w-full border-t border-white/10"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+              <span class="bg-primary-600 px-2 text-white">Or continue with</span>
+            </div>
+          </div>
 
-			<div class="mt-6">
-				<div class="relative">
-					<div class="absolute inset-0 flex items-center">
-						<div class="w-full border-t border-gray-300 dark:border-gray-600"></div>
-					</div>
-					<div class="relative flex justify-center text-sm">
-						<span class="bg-white px-2 text-gray-500 dark:bg-gray-800">Or continue with</span>
-					</div>
-				</div>
+          <button
+            type="button"
+            onclick={() => signIn('google', { callbackUrl: '/auth/onboarding' })}
+            class="mt-6 flex w-full items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white backdrop-blur-sm transition-transform hover:scale-105"
+          >
+            <svg class="mr-2 h-5 w-5" viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
+              />
+            </svg>
+            Continue with Google
+          </button>
+        </div>
 
-				<div class="mt-6">
-					<button
-						type="button"
-						onclick={() => signIn('google', { callbackUrl: '/auth/onboarding' })}
-						class="flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-					>
-						<svg class="mr-2 h-5 w-5" viewBox="0 0 24 24">
-							<path
-								fill="currentColor"
-								d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"
-							/>
-						</svg>
-						Continue with Google
-					</button>
-				</div>
-			</div>
-
-			<p class="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
-				Already have an account?
-				<a href="/auth/login" class="font-medium text-primary-600 hover:text-primary-500">
-					Sign in
-				</a>
-			</p>
-		</div>
-	</div>
+        <p class="mt-6 text-center text-sm text-white">
+          Already have an account?
+          <a href="/auth/login" class="font-medium text-white hover:text-primary-200">
+            Sign in
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

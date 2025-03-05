@@ -14,112 +14,40 @@
 <svelte:head>
 	<title>Welcome to Modo</title>
 </svelte:head>
+shehehehehehr
+<div class="min-h-screen bg-blue-600">
+  <div class="relative flex min-h-screen flex-col justify-center overflow-hidden py-12">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -left-1/4 top-1/4 h-64 w-64 rounded-full bg-blue-500/30"></div>
+      <div class="absolute -right-1/4 bottom-1/4 h-96 w-96 rounded-full bg-blue-700/30"></div>
+    </div>
 
-<div
-	class="min-h-screen bg-gradient-to-b from-primary-50 to-white dark:from-gray-900 dark:to-gray-800"
->
-	<div class="container mx-auto px-4 py-20">
-		<div class="mx-auto max-w-4xl text-center">
-			<a
-				href="/"
-				class="flez-col text-center text-6xl font-bold text-primary-600 dark:text-primary-400"
-			>
-				<div class="flex items-center justify-center">
-					<span class="flex">
-						<img src="/favicon-512x512.png" alt="Modo" class=" mx-auto flex h-12 gap-3" />
+    <div class="relative mx-auto w-full max-w-md px-4">
+      <div class="mb-8 text-center">
+        <div class="relative mx-auto h-48 w-48 overflow-hidden rounded-full bg-blue-100">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="relative h-full w-full">
+              <!-- Abstract Design -->
+              <div class="absolute inset-0">
+                <svg viewBox="0 0 200 200" class="h-full w-full">
+                  <path d="M 0,50 C 50,0 150,0 200,50 S 200,150 150,200 S 50,200 0,150 Z" fill="rgb(59, 130, 246)" />
+                  <circle cx="100" cy="100" r="30" fill="rgb(37, 99, 235)" />
+                  <path d="M 50,0 Q 100,100 50,200" stroke="rgb(147, 197, 253)" fill="none" stroke-width="2" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="mt-6 text-3xl font-bold text-white">Manage your daily tasks</h2>
+        <p class="mt-2 text-blue-100">Team and Project management with solution providing App</p>
+      </div>
 
-						odo
-					</span>
-				</div>
-			</a>
-
-			<h1 class="mb-6 text-5xl font-bold text-gray-900 dark:text-white">
-				Transform Your Study Habits with AI
-			</h1>
-
-			<p class="mb-12 text-xl text-gray-600 dark:text-gray-300">
-				Get personalized study plans, smart task management, and AI-driven insights to boost your
-				academic performance.
-			</p>
-
-			<div class="flex flex-col justify-center gap-4 sm:flex-row">
-				<a href="/auth/signup" class="btn-primary text-center"> Get Started Free </a>
-				<a
-					href="/auth/login"
-					class="btn-secondary text-center dark:border-gray-600 dark:text-gray-300"
-				>
-					Sign In
-				</a>
-			</div>
-		</div>
-	</div>
-
-	<!-- Features -->
-	<div class="container mx-auto px-4 py-20">
-		<div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-3">
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-					Smart Study Planning
-				</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					AI-powered study schedules tailored to your learning style and goals.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M13 10V3L4 14h7v7l9-11h-7z"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">Progress Tracking</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					Monitor your progress and get insights to improve your study habits.
-				</p>
-			</div>
-
-			<div class="rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
-				<svg
-					class="mb-4 h-12 w-12 text-primary-600"
-					fill="none"
-					stroke="currentColor"
-					viewBox="0 0 24 24"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-					/>
-				</svg>
-				<h3 class="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-					Analytics & Insights
-				</h3>
-				<p class="text-gray-600 dark:text-gray-300">
-					Get detailed analytics and personalized recommendations.
-				</p>
-			</div>
-		</div>
-	</div>
+      <div class="rounded-2xl bg-white/10 p-8 backdrop-blur-lg">
+        <button class="w-full rounded-xl bg-white py-3 text-center font-semibold text-blue-600 shadow-lg transition-transform hover:scale-105">
+          Get Started
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
