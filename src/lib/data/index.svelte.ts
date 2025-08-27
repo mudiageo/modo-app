@@ -4,8 +4,7 @@ const populateData = async (store) => {
 	const db = await initDB();
 	const value = await db.getAll(store);
 	if (!value) return;
-
-	return store !== 'profile' || store !== 'settings' ? value : value[0];
+	return store === 'profile' || store === 'settings' ? value[0] : value;
 };
 export const getFromStoreWhere = async (store, value) => {
 	const db = await initDB();

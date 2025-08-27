@@ -36,7 +36,8 @@
 	);
 
 	const tasks = tasksStore.data || [];
-	const profile = $state(profileStore.data || {});
+	const profile = profileStore.data || {}
+
 	const userData = $state({
 		studyPatterns: tasks,
 		tasks,
