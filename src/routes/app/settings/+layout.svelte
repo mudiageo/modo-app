@@ -24,7 +24,7 @@
   <MobileHeader title={currentSection.charAt(0).toUpperCase() + currentSection.slice(1)} />
   
   {#if currentSection === 'settings'}
-    <div class="p-4">
+    <div class="p-4 md:hidden">
       <SettingsList />
     </div>
   {:else}
@@ -43,20 +43,20 @@
   </div>
 {/if}
 
-<div class="min-h-screen">
+<!--<div class="min-h-screen">-->
 	<!-- Mobile View -->
-	<div class="md:hidden">
-		<Sidenav />
-	</div>
+<!--	<div class="md:hidden">-->
+<!--		<Sidenav />-->
+<!--	</div>-->
 
 	<!-- Desktop View -->
-	<div class="hidden md:grid md:grid-cols-[250px,1fr] md:gap-8">
-		<Sidenav />
-		{#if showContent}
-			<div class="px-4 py-8">
-				{@render children?.()}
-			</div>
-		{/if}
-	</div>
-</div>
+<!--	<div class="hidden md:grid md:grid-cols-[250px,1fr] md:gap-8">-->
+<!--		<Sidenav />-->
+<!--		{#if showContent}-->
+<!--			<div class="px-4 py-8">-->
+<!--				{@render children?.()}-->
+<!--			</div>-->
+<!--		{/if}-->
+<!--	</div>-->
+<!--</div>-->
 

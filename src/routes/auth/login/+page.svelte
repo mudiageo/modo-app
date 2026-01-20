@@ -24,6 +24,30 @@ async function handleSubmit() {
       const res = await result.json()
       let url = new URL(res.url)
       if(url.pathname === '/auth/onboarding') goto(url.pathname)
+
+				const errCode = url.searchParams.get('code');
+
+				switch (errCode) {
+					case 'unverified_email':
+						error = 'Email must be verified';
+						if (confirm('Verify email?')) {
+							goto('/verify-email');
+						}
+						break;
+
+					case 'account_not_found':
+						error = 'No account found with this email';
+						if (confirm('Signup?')) {
+							goto('/signup');
+						}
+						break;
+					case 'invalid_credentials':
+						error = 'Invalid credentials';
+						if (confirm('Signup?')) {
+							goto('/signup');
+						}
+						break;
+				}
     }
   } catch (e) {
     error = 'An error occurred. Please try again.';

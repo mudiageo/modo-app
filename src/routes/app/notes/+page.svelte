@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { marked } from 'marked';
 
 	let { data }: { data: PageData } = $props();
 
@@ -56,7 +57,7 @@
 					{/if}
 
 					<div class="prose prose-sm mb-4 max-w-none">
-						{@html marked(note.content)}
+						{@html marked.parse(note.content)}
 					</div>
 
 					{#if note.tags.length > 0}

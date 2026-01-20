@@ -1,7 +1,7 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'studyai_db';
-const DB_VERSION = 2;
+const DB_VERSION = 4;
 
 export async function initDB() {
 	return openDB(DB_NAME, DB_VERSION, {
@@ -29,6 +29,10 @@ export async function initDB() {
 				const sessionStore = db.createObjectStore('studySessions', { keyPath: 'id' });
 				sessionStore.createIndex('date', 'date');
 			}
+			
+			if (!db.objectStoreNames.contains('notes')) {
+				db.createObjectStore('notes', { keyPath: 'id' });
+			}
 
 			// Progress store
 			if (!db.objectStoreNames.contains('progress')) {
@@ -47,12 +51,12 @@ export async function initDB() {
 
 			// Quotes store
 			if (!db.objectStoreNames.contains('quotes')) {
-				db.createObjectStore('quotes');
+				db.createObjectStore('quotes', { keyPath: 'id' });
 			}
 
 			// Recommendations store
 			if (!db.objectStoreNames.contains('recommendations')) {
-				db.createObjectStore('recommendations');
+				db.createObjectStore('recommendations', { keyPath: 'id' });
 			}
 
 			// Game state and elements store
@@ -67,12 +71,12 @@ export async function initDB() {
 
 			// resources store
 			if (!db.objectStoreNames.contains('resources')) {
-				db.createObjectStore('resources');
+				db.createObjectStore('resources', { keyPath: 'id' });
 			}
 
 			// Subscriptions store
 			if (!db.objectStoreNames.contains('subscriptions')) {
-				db.createObjectStore('subscriptions');
+				db.createObjectStore('subscriptions', { keyPath: 'id' });
 			}
 		}
 	});

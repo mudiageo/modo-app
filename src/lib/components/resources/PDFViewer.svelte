@@ -17,7 +17,7 @@
 
 	onMount(async () => {
 		const pdfjsLib = await import('pdfjs-dist');
-		pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+		pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 		pdfDoc = await pdfjsLib.getDocument(url).promise;
 		totalPages = pdfDoc.numPages;

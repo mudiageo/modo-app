@@ -17,7 +17,7 @@ export const { handle, signIn, signOut, middleware, createUser } = await guardia
 		credentials: {
 			additionalUserFields: ['role', 'premium', 'premiumUntil'],
 			allowRegistration: true,
-			requireEmailVerification: true
+			requireEmailVerification: false
 		}
 	},
 

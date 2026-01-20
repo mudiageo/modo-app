@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import { PrismaClient } from '@prisma/client';
-import { createUser } from '$lib/auth';
+import { createUser } from '$lib/server/auth';
 
 export const load = async (event) => {
 	const session = await event.locals.auth();

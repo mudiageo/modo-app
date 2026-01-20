@@ -4,7 +4,7 @@
 	import PDFViewer from '$lib/components/resources/PDFViewer.svelte';
 	import FlashcardDeck from '$lib/components/resources/FlashcardDeck.svelte';
 
-	let resources = $state<Resource[]>(resourcesStore.data?.resources || []);
+	let resources = $state<Resource[]>(resourcesStore.data || []);
 
 	let uploadingFile = $state(false);
 	let newResource = $state({
@@ -22,14 +22,23 @@
 		try {
 			// In a real app, upload to cloud storage
 			const url = URL.createObjectURL(file);
+			const reader = new FileReader();
 
-			const resource = await addResource({
+				reader.onload = (e) => {
+				   addResource({
 				...newResource,
-				url,
+				url: e.target.result,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString()
 			});
 
+					
+				};
+
+				reader.readAsDataURL(file);
+
+
+			
 			// Reset form
 			newResource = {
 				title: '',

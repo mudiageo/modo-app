@@ -178,6 +178,8 @@ export interface Resource {
 	description?: string;
 	url: string;
 	courseId?: string;
+	annotations?: Annotation[];
+	flashcards?: Flashcard[];
 	createdAt: string;
 	updatedAt: string;
 }

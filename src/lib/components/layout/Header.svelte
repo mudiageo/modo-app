@@ -23,7 +23,8 @@
 		{ label: 'Notes', href: '/app/notes', icon: 'note' },
 		{ label: 'Settings', href: '/app/settings', icon: 'cog' },
 		{ href: '/app/progress', icon: 'chart', label: 'Progress' },
-		{ label: 'Help', href: '/app/help', icon: 'help' }
+		{ label: 'Ranking', href: '/app/leaderboard', icon: 'trophy' },
+		{ label: 'Help', href: '/app/settings/help', icon: 'help' },
 	];
 </script>
 

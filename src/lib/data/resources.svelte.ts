@@ -6,16 +6,6 @@ import type { Resource, Annotation, Flashcard } from '$lib/types';
 
 export const resourcesStore = dbStoreData('resources');
 
-let resources = $state<Resource[]>(resourcesStore.data?.resources || []);
-let annotations = $state<Annotation[]>(resourcesStore.data?.annotations || []);
-let flashcards = $state<Flashcard[]>(resourcesStore.data?.flashcards || []);
-
-function saveToDb() {
-	if (browser) {
-		resourcesStore.data = { resources, annotations, flashcards };
-	}
-}
-
 export function addResource(resource: Omit<Resource, 'id' | 'createdAt' | 'updatedAt'>) {
 	const newResource: Resource = {
 		...resource,
@@ -24,8 +14,7 @@ export function addResource(resource: Omit<Resource, 'id' | 'createdAt' | 'updat
 		updatedAt: new Date().toISOString()
 	};
 
-	resources = [...resources, newResource];
-	saveToDb();
+	resourcesStore.add(newResource)
 	return newResource;
 }
 
@@ -36,8 +25,11 @@ export function addAnnotation(annotation: Omit<Annotation, 'id' | 'createdAt'>) 
 		createdAt: new Date().toISOString()
 	};
 
-	annotations = [...annotations, newAnnotation];
-	saveToDb();
+	const resource = resourcesStore.select(annotation.resourceId)
+	
+	resource.annotations?.push(newAnnotation)
+	
+	resourcesStore.update(resource)
 	return newAnnotation;
 }
 
